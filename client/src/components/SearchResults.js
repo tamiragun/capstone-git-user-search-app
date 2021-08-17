@@ -9,11 +9,13 @@ export function SearchResults(props) {
     return (
       <li key={result.id} className="bullet">
         <p>
-          <strong>Name: </strong>
+          <strong>Username: </strong>
           {result.login} <br></br>
+          <strong>Source: </strong>
+          {result.source} <br></br>
         </p>
 
-        <button value={result.login} onClick={handleClick}>
+        <button value={[result.source, result.login]} onClick={handleClick}>
           View this user
         </button>
       </li>

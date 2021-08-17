@@ -25,9 +25,15 @@ function App() {
     }
   };
 
-  const displayUser = async (login) => {
+  const displayUser = async (input) => {
+    //console.log(input);
+    const inputArray = input.split(",");
+    //console.log(inputArray);
+    const source = inputArray[0];
+    //console.log(source);
+    const login = inputArray[1];
     //console.log(login);
-    const url = `http://localhost:3001/api/user?user=${login}`;
+    const url = `http://localhost:3001/api/user?source=${source}&user=${login}`;
     try {
       const response = await fetch(url);
       //console.log("Response: ", response, " Type: ", typeof response);
