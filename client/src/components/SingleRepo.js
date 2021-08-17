@@ -11,10 +11,13 @@ export function SingleRepo(props) {
       <div className="TBC">
         <p>
           <strong>Name: </strong>
-          {props.repo.repoName}
+          {props.repo.name}
           <br></br>
-          <strong>Url: </strong>
-          {props.repo.commitMsg}
+          <strong>Description: </strong>
+          {props.repo.description}
+          <br></br>
+          <strong>Last updated: </strong>
+          {props.repo.updated_at}
           <br></br>
         </p>
       </div>

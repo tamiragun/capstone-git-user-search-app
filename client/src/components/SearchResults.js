@@ -10,10 +10,10 @@ export function SearchResults(props) {
       <li key={result.id} className="bullet">
         <p>
           <strong>Name: </strong>
-          {result.name} <br></br>
+          {result.login} <br></br>
         </p>
 
-        <button value={result.id} onClick={handleClick}>
+        <button value={result.login} onClick={handleClick}>
           View this user
         </button>
       </li>
