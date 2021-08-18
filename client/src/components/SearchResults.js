@@ -15,7 +15,11 @@ export function SearchResults(props) {
           {result.source} <br></br>
         </p>
 
-        <button value={[result.source, result.login]} onClick={handleClick}>
+        <button
+          value={[result.source, result.login]}
+          onClick={handleClick}
+          className="select-button"
+        >
           View this user
         </button>
       </li>
@@ -23,8 +27,7 @@ export function SearchResults(props) {
   });
 
   return (
-    <div className="search-results">
-      <h3>Search results:</h3>
+    <div>
       <ul className="results-list">{resultsList}</ul>
     </div>
   );

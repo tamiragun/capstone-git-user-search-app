@@ -8,10 +8,15 @@ import "./App.css";
 function App() {
   const [user, setUser] = React.useState(null);
   const [repo, setRepo] = React.useState(null);
-  const [results, setResults] = React.useState([]);
+  const [results, setResults] = React.useState(null);
+  const [showResults, setShowResults] = React.useState(false);
 
   //Call the server to return search results
   const handleSearch = async (term) => {
+    setUser(null);
+    setRepo(null);
+    setResults(null);
+    setShowResults(true);
     const url = `http://localhost:3001/api/search?term=${term}`;
     try {
       const response = await fetch(url);
@@ -26,6 +31,8 @@ function App() {
   };
 
   const displayUser = async (input) => {
+    setUser(null);
+    setRepo(null);
     //console.log(input);
     const inputArray = input.split(",");
     //console.log(inputArray);
@@ -51,6 +58,7 @@ function App() {
   };
 
   const displayRepo = async (source, user, repo) => {
+    setRepo(null);
     const repoData = repo.split(",");
     //console.log(repoData);
     const repoName = repoData[0];
@@ -74,35 +82,58 @@ function App() {
     }
   };
 
-  const goBack = () => {
+  const backToSearch = () => {
     setUser(null);
     setRepo(null);
+  };
+
+  const backToUser = () => {
+    setRepo(null);
+  };
+
+  const backToHome = () => {
+    setUser(null);
+    setRepo(null);
+    setResults(null);
+    setShowResults(false);
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Search users across Github, Gitlab, and Gitbucket</h1>
+        <h1>Search users across Github and Gitlab</h1>
       </header>
-      <div>
+      <div className="main-body">
         <SearchBar handleSearch={handleSearch}></SearchBar>
-        <div className="main-body">
-          <div classname="search-results-container">
-            <SearchResults
-              displayUser={displayUser}
-              results={results}
-            ></SearchResults>
-          </div>
-          <div className="single-cards">
-            {user && (
-              <SingleUser
-                goBack={goBack}
-                user={user}
-                displayRepo={displayRepo}
-              ></SingleUser>
+        {showResults && (
+          <div className="search-results">
+            <h2>Search results:</h2>
+            {!results ? (
+              <div className="placeholder">Loading...</div>
+            ) : results.length === 0 ? (
+              <div className="placeholder">No results on Github or Gitlab.</div>
+            ) : (
+              <SearchResults
+                displayUser={displayUser}
+                results={results}
+              ></SearchResults>
             )}
-            {repo && <SingleRepo goBack={goBack} repo={repo}></SingleRepo>}
+            <button onClick={backToHome} className="back-button">
+              Search again
+            </button>
           </div>
+        )}
+        <div className="single-cards">
+          {user && (
+            <SingleUser
+              backToSearch={backToSearch}
+              user={user}
+              displayRepo={displayRepo}
+            ></SingleUser>
+          )}
+          {repo && (
+            <SingleRepo backToUser={backToUser} repo={repo}></SingleRepo>
+          )}
         </div>
       </div>
     </div>

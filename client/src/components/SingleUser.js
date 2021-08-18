@@ -24,7 +24,7 @@ export function SingleUser(props) {
       }
     };
     fetchData();
-  }, [props.user.login]);
+  }, [props.user]);
 
   // const handleClick = (e) => {
   //   props.goBack();
@@ -32,18 +32,16 @@ export function SingleUser(props) {
 
   return (
     <div className="single-user">
-      <h3>Selected user</h3>
+      <h2>{props.user.login}</h2>
       <div className="TBC">
-        <p>
-          <strong>Name: </strong>
-          {props.user.login}
-          <br></br>
-          <strong>Url: </strong>
-          {props.user.url}
-          <br></br>
-        </p>
+        <img src={props.user.avatar} alt="user avatar"></img>
+        <br></br>
+        <a href={props.user.url}>{props.user.url}</a>
+        <h3>Latest 5 repositories:</h3>
         {!repos ? (
-          "Loading"
+          <div className="placeholder">Loading...</div>
+        ) : repos.length === 0 ? (
+          <div className="placeholder">No repositories yet</div>
         ) : (
           <RepoList
             user={props.user}
@@ -53,7 +51,9 @@ export function SingleUser(props) {
         )}
       </div>
       <div className="TBC">
-        <button onClick={props.goBack}>Go back</button>
+        <button onClick={props.backToSearch} className="back-button">
+          Go back to search results
+        </button>
       </div>
     </div>
   );

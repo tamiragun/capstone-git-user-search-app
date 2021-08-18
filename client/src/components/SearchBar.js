@@ -22,14 +22,17 @@ export class SearchBar extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit} className="TBC">
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             value={this.state.searchString}
             onChange={this.handleUserInput}
+            className="search-input"
             required
           ></input>
-          <button type="submit">Search</button>
+          <button type="submit" className="select-button">
+            Search
+          </button>
         </form>
       </div>
     );

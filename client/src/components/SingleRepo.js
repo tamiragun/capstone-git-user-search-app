@@ -30,14 +30,11 @@ export function SingleRepo(props) {
 
   return (
     <div className="single-repo">
-      <h3>Selected repo</h3>
+      <h2>{props.repo.name}</h2>
       <div className="TBC">
         <p>
-          <strong>Name: </strong>
-          {props.repo.name}
-          <br></br>
-          <strong>Description: </strong>
           {props.repo.description}
+          <br></br>
           <br></br>
           <strong>First created: </strong>
           {props.repo.created_at}
@@ -46,10 +43,19 @@ export function SingleRepo(props) {
           {props.repo.updated_at}
           <br></br>
         </p>
-        {!commits ? "Loading" : <CommitList commits={commits}></CommitList>}
+        <h3>Latest 5 commits:</h3>
+        {!commits ? (
+          <div className="placeholder">Loading...</div>
+        ) : commits.length === 0 ? (
+          <div className="placeholder">No commits yet</div>
+        ) : (
+          <CommitList commits={commits}></CommitList>
+        )}
       </div>
       <div className="TBC">
-        <button onClick={props.goBack}>Go back</button>
+        <button onClick={props.backToUser} className="back-button">
+          Go back to user profile
+        </button>
       </div>
     </div>
   );

@@ -2,25 +2,97 @@
   text-align: center;
 }
 
-.main-body {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+.search-input {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
 }
 
-.results-list,
-.repo-list {
+.placeholder {
+  margin-bottom: 20px;
+}
+
+.results-list {
   list-style: none;
   padding: 0;
 }
 
-.repo-list ul {
-  border: dotted, 1px, lightgrey;
+.repo-list {
+  padding-left: 20px;
 }
 
+.repo-bullet {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.repo-bullet span {
+  padding: 0 10px;
+}
+
+.commits-list {
+  padding-left: 20px;
+}
+
+.commit-bullet {
+  text-align: left;
+  padding: 5px;
+}
+
+/*BOX STYLING \
+https://getcssscan.com/css-box-shadow-examples
+*/
 .single-user,
 .single-repo,
 .search-results {
-  border: dotted 1px grey;
-  padding: 20px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 20px 30px 30px 30px;
+  margin: 30px;
+}
+
+/*BUTTON STYLING
+https://www.w3schools.com/css/css3_buttons.asp
+*/
+
+.select-button {
+  background-color: white;
+  color: black;
+  border: 2px solid #4caf50;
+
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+}
+
+.select-button:hover {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+}
+
+.back-button {
+  background-color: white;
+  color: black;
+  border: 2px solid #008cba;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+  transition-duration: 0.4s;
+}
+
+.back-button:hover {
+  background-color: #008cba; /* Blue */
+  border: none;
+  color: white;
 }

@@ -187,8 +187,8 @@ router.get("/api/repos", async (req, res, next) => {
           updated_at: object.updated_at,
         };
       });
-
-      res.send(resultGithub);
+      const top5ReposGithub = resultGithub.splice(0, 5);
+      res.send(top5ReposGithub);
     } else if (source === "Gitlab") {
       const responseGitlab = await fetch(urlGitlab);
       //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
@@ -203,8 +203,8 @@ router.get("/api/repos", async (req, res, next) => {
           updated_at: object.last_activity_at,
         };
       });
-
-      res.send(resultGitlab);
+      const top5ReposGitlab = resultGitlab.splice(0, 5);
+      res.send(top5ReposGitlab);
     }
   } catch (err) {
     next(err);
