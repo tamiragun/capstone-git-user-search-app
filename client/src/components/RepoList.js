@@ -3,7 +3,8 @@ import React from "react";
 export function RepoList(props) {
   const repos = props.repos;
   const handleClick = (e) => {
-    props.displayRepo(props.user, e.target.value);
+    console.log(props.user.source, props.user.login, e.target.value);
+    props.displayRepo(props.user.source, props.user.login, e.target.value);
   };
   const reposList = repos.map((repo) => {
     return (
@@ -12,7 +13,7 @@ export function RepoList(props) {
           <strong>Name: </strong> {repo.name} <br></br>
         </p>
 
-        <button value={repo.name} onClick={handleClick}>
+        <button value={[repo.name, repo.id]} onClick={handleClick}>
           View this repo
         </button>
       </li>

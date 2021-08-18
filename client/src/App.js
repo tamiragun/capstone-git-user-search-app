@@ -50,8 +50,14 @@ function App() {
     }
   };
 
-  const displayRepo = async (user, repo) => {
-    const url = `http://localhost:3001/api/repo?user=${user}&repo=${repo}`;
+  const displayRepo = async (source, user, repo) => {
+    const repoData = repo.split(",");
+    //console.log(repoData);
+    const repoName = repoData[0];
+    //console.log(repoName);
+    const repoId = repoData[1];
+    //console.log(repoId);
+    const url = `http://localhost:3001/api/repo?source=${source}&user=${user}&reponame=${repoName}&repoid=${repoId}`;
     try {
       const response = await fetch(url);
       //console.log("Response: ", response, " Type: ", typeof response);

@@ -184,7 +184,7 @@ router.get("/api/repos", async (req, res, next) => {
           name: object.name,
           description: object.description,
           created_at: object.created_at,
-          updated_at: object.last_activity_at,
+          updated_at: object.updated_at,
         };
       });
 
@@ -200,7 +200,7 @@ router.get("/api/repos", async (req, res, next) => {
           name: object.name,
           description: object.description,
           created_at: object.created_at,
-          updated_at: object.updated_at,
+          updated_at: object.last_activity_at,
         };
       });
 
@@ -214,16 +214,104 @@ router.get("/api/repos", async (req, res, next) => {
 //Return a single repo
 router.get("/api/repo", async (req, res, next) => {
   //console.log("Query: ", req.query, ", Type: ", typeof req.query);
+  const source = req.query.source;
+  // console.log("Source: ", source, ", Type: ", typeof source);
   const user = req.query.user;
-  const repo = req.query.repo;
-  //console.log("User: ", user, ", Type: ", typeof user);
-  const url = `https://api.github.com/repos/${user}/${repo}`;
+  // console.log("User: ", user, ", Type: ", typeof user);
+  const repoName = req.query.reponame;
+  // console.log("repoName: ", repoName, ", Type: ", typeof repoName);
+  const repoId = req.query.repoid;
+  // console.log("repoId: ", repoId, ", Type: ", typeof repoId);
+  const urlGithub = `https://api.github.com/repos/${user}/${repoName}`;
+  const urlGitlab = `https://gitlab.com/api/v4/projects/${repoId}`;
   try {
-    const response = await fetch(url);
-    //console.log("Response: ", response, ", Type: ", typeof response);
-    const jsonResponse = await response.json();
-    //console.log("jsonResults: ", jsonResponse, ", Type: ", typeof jsonResponse);
-    res.send(jsonResponse);
+    if (source === "Github") {
+      const responseGithub = await fetch(urlGithub);
+      //console.log("responseGithub: ", responseGithub, ", Type: ", typeof responseGithub);
+      const jsonResponseGithub = await responseGithub.json();
+      //console.log("jsonResponseGithub: ", jsonResponseGithub, ", Type: ", typeof jsonResponseGithub);
+      const result = {
+        id: jsonResponseGithub.id,
+        name: jsonResponseGithub.name,
+        description: jsonResponseGithub.description,
+        created_at: jsonResponseGithub.created_at,
+        updated_at: jsonResponseGithub.updated_at,
+        owner: user,
+        source: "Github",
+      };
+      res.send(result);
+    } else if (source === "Gitlab") {
+      const responseGitlab = await fetch(urlGitlab);
+      //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
+      const jsonResponseGitlab = await responseGitlab.json();
+      //console.log("jsonResponseGitlab: ", jsonResponseGitlab, ", Type: ", typeof jsonResponseGitlab);
+      const result = {
+        id: jsonResponseGitlab.id,
+        name: jsonResponseGitlab.name,
+        description: jsonResponseGitlab.description,
+        created_at: jsonResponseGitlab.created_at,
+        updated_at: jsonResponseGitlab.last_activity_at,
+        owner: user,
+        source: "Gitlab",
+      };
+      //console.log("result: ", result, ", Type: ", typeof result);
+      res.send(result);
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+//Return a user's commits
+router.get("/api/commits", async (req, res, next) => {
+  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
+  const source = req.query.source;
+  // console.log("Source: ", source, ", Type: ", typeof source);
+  const user = req.query.user;
+  // console.log("User: ", user, ", Type: ", typeof user);
+  const repoName = req.query.reponame;
+  // console.log("repoName: ", repoName, ", Type: ", typeof repoName);
+  const repoId = req.query.repoid;
+  // console.log("repoId: ", repoId, ", Type: ", typeof repoId);
+  const urlGithub = `https://api.github.com/repos/${user}/${repoName}/commits`;
+  const urlGitlab = `https://gitlab.com/api/v4/projects/${repoId}/repository/commits`;
+  try {
+    if (source === "Github") {
+      const responseGithub = await fetch(urlGithub);
+      //console.log("responseGithub: ", responseGithub, ", Type: ", typeof responseGithub);
+      const jsonResponseGithub = await responseGithub.json();
+      // console.log(
+      //   "jsonResponseGithub: ",
+      //   jsonResponseGithub,
+      //   ", Type: ",
+      //   typeof jsonResponseGithub
+      // );
+      const resultGithub = jsonResponseGithub.map((object) => {
+        return {
+          id: object.sha,
+          message: object.commit.message,
+          committed_date: object.commit.committer.date,
+        };
+      });
+      const top5ResultsGithub = resultGithub.slice(0, 5);
+      //console.log(top5ResultsGithub);
+      res.send(top5ResultsGithub);
+    } else if (source === "Gitlab") {
+      const responseGitlab = await fetch(urlGitlab);
+      //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
+      const jsonResponseGitlab = await responseGitlab.json();
+      //console.log("jsonResponseGitlab: ", jsonResponseGitlab, ", Type: ", typeof jsonResponseGitlab);
+      const resultGitlab = jsonResponseGitlab.map((object) => {
+        return {
+          id: object.id,
+          message: object.message,
+          committed_date: object.committed_date,
+        };
+      });
+      const top5ResultsGitlab = resultGitlab.slice(0, 5);
+      //console.log(top5ResultsGithub);
+      res.send(top5ResultsGitlab);
+    }
   } catch (err) {
     next(err);
   }

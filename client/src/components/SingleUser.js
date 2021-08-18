@@ -5,27 +5,30 @@ const fetch = require("node-fetch");
 export function SingleUser(props) {
   const [repos, setRepos] = React.useState(null);
 
-  React.useEffect(async () => {
-    const url = `http://localhost:3001/api/repos?source=${props.user.source}&user=${props.user.login}`;
-    try {
-      const response = await fetch(url);
-      //console.log("Response: ", response, " Type: ", typeof response);
-      const jsonResponse = await response.json();
-      // console.log(
-      //   "jsonResponse: ",
-      //   jsonResponse,
-      //   " Type: ",
-      //   typeof jsonResponse
-      // );
-      setRepos(jsonResponse);
-    } catch (err) {
-      console.log(err);
-    }
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const url = `http://localhost:3001/api/repos?source=${props.user.source}&user=${props.user.login}`;
+      try {
+        const response = await fetch(url);
+        //console.log("Response: ", response, " Type: ", typeof response);
+        const jsonResponse = await response.json();
+        // console.log(
+        //   "jsonResponse: ",
+        //   jsonResponse,
+        //   " Type: ",
+        //   typeof jsonResponse
+        // );
+        setRepos(jsonResponse);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
   }, [props.user.login]);
 
-  const handleClick = (e) => {
-    props.goBack();
-  };
+  // const handleClick = (e) => {
+  //   props.goBack();
+  // };
 
   return (
     <div className="single-user">
@@ -43,7 +46,7 @@ export function SingleUser(props) {
           "Loading"
         ) : (
           <RepoList
-            user={props.user.login}
+            user={props.user}
             repos={repos}
             displayRepo={props.displayRepo}
           ></RepoList>
