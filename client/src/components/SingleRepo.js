@@ -9,7 +9,7 @@ export function SingleRepo(props) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const url = `http://localhost:3001/api/commits?source=${props.repo.source}&user=${props.repo.owner}&reponame=${props.repo.name}&repoid=${props.repo.id}`;
+      const url = `/api/commits?source=${props.repo.source}&user=${props.repo.owner}&reponame=${props.repo.name}&repoid=${props.repo.id}`;
       try {
         const response = await fetch(url);
         //console.log("Response: ", response, " Type: ", typeof response);

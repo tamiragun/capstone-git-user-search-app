@@ -3,13 +3,10 @@ var router = express.Router();
 const fetch = require("node-fetch");
 //const { getData } = require("../util/helperFunctions.js");
 
-//Get Data helper function
+//Helper function to call a third party API and convert the results
 const getData = async (url) => {
   const response = await fetch(url);
-  //console.log("Response: ", response, ", Type: ", typeof response);
   const jsonResponse = await response.json();
-  //console.log("jsonResults: ", jsonResponse, ", Type: ", typeof jsonResponse);
-  //return JSON.stringify(jsonResponse);
   return jsonResponse;
 };
 
@@ -24,17 +21,9 @@ router.use((req, res, next) => {
   next();
 });
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
-
 //Return search results for a given search term
 router.get("/api/search", async (req, res, next) => {
-  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
   const term = req.query.term;
-  //console.log("Term: ", term, ", Type: ", typeof term);
-
   const urlGithub = `https://api.github.com/users/${term}`;
   const urlGitlab = `https://gitlab.com/api/v4/users?username=${term}`;
   let resultsArray = [];
@@ -42,19 +31,7 @@ router.get("/api/search", async (req, res, next) => {
   try {
     //GITHUB FETCH:
     const responseGithub = await fetch(urlGithub);
-    // console.log(
-    //   "responseGithub: ",
-    //   responseGithub,
-    //   ", Type: ",
-    //   typeof responseGithub
-    // );
     const jsonResponseGithub = await responseGithub.json();
-    // console.log(
-    //   "jsonResponseGithub: ",
-    //   jsonResponseGithub,
-    //   ", Type: ",
-    //   typeof jsonResponseGithub
-    // );
     if (jsonResponseGithub.message !== "Not Found") {
       const resultGithub = {
         id: jsonResponseGithub.id,
@@ -70,19 +47,7 @@ router.get("/api/search", async (req, res, next) => {
     //GITLAB FETCH:
 
     const responseGitlab = await fetch(urlGitlab);
-    // console.log(
-    //   "responseGitlab: ",
-    //   responseGitlab,
-    //   ", Type: ",
-    //   typeof responseGitlab
-    // );
     const jsonResponseGitlab = await responseGitlab.json();
-    // console.log(
-    //   "jsonResponseGitlab: ",
-    //   jsonResponseGitlab,
-    //   ", Type: ",
-    //   typeof jsonResponseGitlab
-    // );
     if (jsonResponseGitlab[0]) {
       const resultGitlab = {
         id: jsonResponseGitlab[0].id,
@@ -94,13 +59,6 @@ router.get("/api/search", async (req, res, next) => {
       };
       resultsArray.push(resultGitlab);
     }
-
-    // console.log(
-    //   "ResultsArray: ",
-    //   resultsArray,
-    //   ", Type: ",
-    //   typeof resultsArray
-    // );
     res.send(resultsArray);
   } catch (err) {
     next(err);
@@ -109,18 +67,14 @@ router.get("/api/search", async (req, res, next) => {
 
 //Return a single user
 router.get("/api/user", async (req, res, next) => {
-  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
   const user = req.query.user;
   const source = req.query.source;
-  //console.log("User: ", user, ", Type: ", typeof user);
-  //console.log("Source: ", source, ", Type: ", typeof source);
   const urlGithub = `https://api.github.com/users/${user}`;
   const urlGitlab = `https://gitlab.com/api/v4/users?username=${user}`;
 
   try {
     if (source === "Github") {
       const data = await getData(urlGithub);
-      //console.log("Data: ", data, ", Type: ", typeof data);
       if (data.message === "Not Found") {
         res.status(500).send("User not found");
       } else {
@@ -132,17 +86,10 @@ router.get("/api/user", async (req, res, next) => {
           url: data.url,
           source: "Github",
         };
-        // console.log(
-        //   "resultGithub: ",
-        //   resultGithub,
-        //   ", Type: ",
-        //   typeof resultGithub
-        // );
         res.send(resultGithub);
       }
     } else if (source === "Gitlab") {
       const data = await getData(urlGitlab);
-      //console.log("Data: ", data, ", Type: ", typeof data);
       if (!data[0]) {
         res.status(500).send("User not found");
       } else {
@@ -154,12 +101,6 @@ router.get("/api/user", async (req, res, next) => {
           url: data[0].web_url,
           source: "Gitlab",
         };
-        // console.log(
-        //   "resultGitlab: ",
-        //   resultGitlab,
-        //   ", Type: ",
-        //   typeof resultGitlab
-        // );
         res.send(resultGitlab);
       }
     } else {
@@ -172,19 +113,14 @@ router.get("/api/user", async (req, res, next) => {
 
 //Return a user's repositories
 router.get("/api/repos", async (req, res, next) => {
-  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
   const user = req.query.user;
   const source = req.query.source;
-  //console.log("User: ", user, ", Type: ", typeof user);
-  //console.log("Source: ", source, ", Type: ", typeof source);
   const urlGithub = `https://api.github.com/users/${user}/repos`;
   const urlGitlab = `https://gitlab.com/api/v4/users/${user}/projects`;
   try {
     if (source === "Github") {
       const responseGithub = await fetch(urlGithub);
-      //console.log("responseGithub: ", responseGithub, ", Type: ", typeof responseGithub);
       const jsonResponseGithub = await responseGithub.json();
-      //console.log("jsonResponseGithub: ", jsonResponseGithub, ", Type: ", typeof jsonResponseGithub);
       if (jsonResponseGithub.message === "Not Found") {
         res.status(500).send("Reppositories not found");
       } else {
@@ -202,9 +138,7 @@ router.get("/api/repos", async (req, res, next) => {
       }
     } else if (source === "Gitlab") {
       const responseGitlab = await fetch(urlGitlab);
-      //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
       const jsonResponseGitlab = await responseGitlab.json();
-      //console.log("jsonResponseGitlab: ", jsonResponseGitlab, ", Type: ", typeof jsonResponseGitlab);
       if (!jsonResponseGitlab[0]) {
         res.status(500).send("User not found");
       } else {
@@ -228,28 +162,16 @@ router.get("/api/repos", async (req, res, next) => {
 
 //Return a single repo
 router.get("/api/repo", async (req, res, next) => {
-  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
   const source = req.query.source;
-  // console.log("Source: ", source, ", Type: ", typeof source);
   const user = req.query.user;
-  // console.log("User: ", user, ", Type: ", typeof user);
   const repoName = req.query.reponame;
-  // console.log("repoName: ", repoName, ", Type: ", typeof repoName);
   const repoId = req.query.repoid;
-  // console.log("repoId: ", repoId, ", Type: ", typeof repoId);
   const urlGithub = `https://api.github.com/repos/${user}/${repoName}`;
   const urlGitlab = `https://gitlab.com/api/v4/projects/${repoId}`;
   try {
     if (source === "Github") {
       const responseGithub = await fetch(urlGithub);
-      //console.log("responseGithub: ", responseGithub, ", Type: ", typeof responseGithub);
       const jsonResponseGithub = await responseGithub.json();
-      // console.log(
-      //   "jsonResponseGithub: ",
-      //   jsonResponseGithub,
-      //   ", Type: ",
-      //   typeof jsonResponseGithub
-      // );
       if (jsonResponseGithub.message === "Not Found") {
         res.status(500).send("Repository not found");
       } else {
@@ -266,9 +188,7 @@ router.get("/api/repo", async (req, res, next) => {
       }
     } else if (source === "Gitlab") {
       const responseGitlab = await fetch(urlGitlab);
-      //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
       const jsonResponseGitlab = await responseGitlab.json();
-      //console.log("jsonResponseGitlab: ", jsonResponseGitlab, ", Type: ", typeof jsonResponseGitlab);
       if (jsonResponseGitlab.message === "404 Project Not Found") {
         res.status(500).send("Repository not found");
       } else {
@@ -281,7 +201,6 @@ router.get("/api/repo", async (req, res, next) => {
           owner: user,
           source: "Gitlab",
         };
-        //console.log("result: ", result, ", Type: ", typeof result);
         res.send(result);
       }
     }
@@ -292,28 +211,16 @@ router.get("/api/repo", async (req, res, next) => {
 
 //Return a user's commits
 router.get("/api/commits", async (req, res, next) => {
-  //console.log("Query: ", req.query, ", Type: ", typeof req.query);
   const source = req.query.source;
-  // console.log("Source: ", source, ", Type: ", typeof source);
   const user = req.query.user;
-  // console.log("User: ", user, ", Type: ", typeof user);
   const repoName = req.query.reponame;
-  // console.log("repoName: ", repoName, ", Type: ", typeof repoName);
   const repoId = req.query.repoid;
-  // console.log("repoId: ", repoId, ", Type: ", typeof repoId);
   const urlGithub = `https://api.github.com/repos/${user}/${repoName}/commits`;
   const urlGitlab = `https://gitlab.com/api/v4/projects/${repoId}/repository/commits`;
   try {
     if (source === "Github") {
       const responseGithub = await fetch(urlGithub);
-      //console.log("responseGithub: ", responseGithub, ", Type: ", typeof responseGithub);
       const jsonResponseGithub = await responseGithub.json();
-      // console.log(
-      //   "jsonResponseGithub: ",
-      //   jsonResponseGithub,
-      //   ", Type: ",
-      //   typeof jsonResponseGithub
-      // );
       if (jsonResponseGithub.message === "Not Found") {
         res.status(500).send("Repositories not found");
       } else {
@@ -325,14 +232,11 @@ router.get("/api/commits", async (req, res, next) => {
           };
         });
         const top5ResultsGithub = resultGithub.slice(0, 5);
-        //console.log(top5ResultsGithub);
         res.send(top5ResultsGithub);
       }
     } else if (source === "Gitlab") {
       const responseGitlab = await fetch(urlGitlab);
-      //console.log("responseGitlab: ", responseGitlab, ", Type: ", typeof responseGitlab);
       const jsonResponseGitlab = await responseGitlab.json();
-      //console.log("jsonResponseGitlab: ", jsonResponseGitlab, ", Type: ", typeof jsonResponseGitlab);
       if (jsonResponseGitlab.message === "404 Project Not Found") {
         res.status(500).send("Repository not found");
       } else {
@@ -344,7 +248,6 @@ router.get("/api/commits", async (req, res, next) => {
           };
         });
         const top5ResultsGitlab = resultGitlab.slice(0, 5);
-        //console.log(top5ResultsGithub);
         res.send(top5ResultsGitlab);
       }
     }

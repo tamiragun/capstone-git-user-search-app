@@ -17,7 +17,7 @@ function App() {
     setRepo(null);
     setResults(null);
     setShowResults(true);
-    const url = `http://localhost:3001/api/search?term=${term}`;
+    const url = `/api/search?term=${term}`;
     try {
       const response = await fetch(url);
       //console.log("Response: ", response, " Type: ", typeof response);
@@ -40,7 +40,7 @@ function App() {
     //console.log(source);
     const login = inputArray[1];
     //console.log(login);
-    const url = `http://localhost:3001/api/user?source=${source}&user=${login}`;
+    const url = `/api/user?source=${source}&user=${login}`;
     try {
       const response = await fetch(url);
       //console.log("Response: ", response, " Type: ", typeof response);
@@ -65,7 +65,7 @@ function App() {
     //console.log(repoName);
     const repoId = repoData[1];
     //console.log(repoId);
-    const url = `http://localhost:3001/api/repo?source=${source}&user=${user}&reponame=${repoName}&repoid=${repoId}`;
+    const url = `/api/repo?source=${source}&user=${user}&reponame=${repoName}&repoid=${repoId}`;
     try {
       const response = await fetch(url);
       //console.log("Response: ", response, " Type: ", typeof response);

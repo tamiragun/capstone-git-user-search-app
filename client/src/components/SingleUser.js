@@ -7,7 +7,7 @@ export function SingleUser(props) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const url = `http://localhost:3001/api/repos?source=${props.user.source}&user=${props.user.login}`;
+      const url = `/api/repos?source=${props.user.source}&user=${props.user.login}`;
       try {
         const response = await fetch(url);
         //console.log("Response: ", response, " Type: ", typeof response);

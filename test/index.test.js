@@ -9,12 +9,13 @@ describe("1/5: Display search results API", function () {
   //Testing with a given Github account
   describe("In the case of a currect Github user: ", function () {
     it("It should return the correct Github user object", function (done) {
-      let input = "tamiragun";
-
+      //This user only exists on Github, not Gitlab
+      let query = { term: "tamiragun" };
+      //So the query should return an array with one object
       chai
         .request("http://localhost:3001")
         .get("/api/search")
-        .query({ term: input })
+        .query(query)
         .end((err, res) => {
           res.should.have.status(200);
           res.text.should.eql(
@@ -28,12 +29,13 @@ describe("1/5: Display search results API", function () {
   //Testing with a given Gitlab account
   describe("In the case of a currect Gitlab user: ", function () {
     it("It should return the correct Gitlab user object", function (done) {
-      let input = "jack_smith";
-
+      //This user only exists on Gitlab, not Github
+      let query = { term: "jack_smith" };
+      //So the query should return an array with one object
       chai
         .request("http://localhost:3001")
         .get("/api/search")
-        .query({ term: input })
+        .query(query)
         .end((err, res) => {
           res.should.have.status(200);
           res.text.should.eql(
@@ -47,12 +49,13 @@ describe("1/5: Display search results API", function () {
   //Testing with a given Github and Gitlab account
   describe("In the case of a currect Github and Gitlab user: ", function () {
     it("It should return an array with the correct Github and Gitlab user objects", function (done) {
-      let input = "jack";
-
+      //This user exists on both Gitlab and Github
+      let query = { term: "jack" };
+      //so the query should return two objects in the array
       chai
         .request("http://localhost:3001")
         .get("/api/search")
-        .query({ term: input })
+        .query(query)
         .end((err, res) => {
           res.should.have.status(200);
           res.text.should.eql(
@@ -66,12 +69,13 @@ describe("1/5: Display search results API", function () {
   //Testing with a non-existent account
   describe("In the case of no matching Github or Gitlab user: ", function () {
     it("It should return an empty array", function (done) {
-      let input = "1Gshdjfsh";
-
+      //This user exists on neither Gitlab nor Github
+      let query = { term: "1Gshdjfsh" };
+      //So the query should return an empty array
       chai
         .request("http://localhost:3001")
         .get("/api/search")
-        .query({ term: input })
+        .query(query)
         .end((err, res) => {
           res.should.have.status(200);
           res.text.should.eql("[]");
@@ -86,6 +90,7 @@ describe("2/5: Display single user API", function () {
   //Testing with a given Github account
   describe("In the case of a currect Github user: ", function () {
     it("It should return the correct Github user object", function (done) {
+      //This user exists on Github
       let query = { user: "tamiragun", source: "Github" };
 
       chai
@@ -105,6 +110,7 @@ describe("2/5: Display single user API", function () {
   //Testing with a given Gitlab account
   describe("In the case of a currect Gitlab user: ", function () {
     it("It should return the correct Gitlab user object", function (done) {
+      //This user exists on Gitlab
       let query = { user: "jack_smith", source: "Gitlab" };
 
       chai
@@ -124,6 +130,7 @@ describe("2/5: Display single user API", function () {
   //Testing with wrong parameters
   describe("In the case of not adding the right parameters: ", function () {
     it("Omitting the source should fail the request", function (done) {
+      //This query does not have the source property
       let query = { user: "jack_smith" };
 
       chai
@@ -137,7 +144,36 @@ describe("2/5: Display single user API", function () {
     }).timeout(5000);
 
     it("Omitting the user should fail the request", function (done) {
+      //This query does not have the user property
       let query = { source: "Gitlab" };
+
+      chai
+        .request("http://localhost:3001")
+        .get("/api/user")
+        .query(query)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    }).timeout(5000);
+
+    it("Getting a 404 from Github should fail the request", function (done) {
+      //This user does not exist on Github
+      let query = { user: "jack_smith", source: "Github" };
+
+      chai
+        .request("http://localhost:3001")
+        .get("/api/user")
+        .query(query)
+        .end((err, res) => {
+          res.should.have.status(500);
+          done();
+        });
+    }).timeout(5000);
+
+    it("Getting a 404 from Gitlab should fail the request", function (done) {
+      //This user does not exist on Gitlab
+      let query = { user: "tamiragun", source: "Gitlab" };
 
       chai
         .request("http://localhost:3001")
@@ -156,6 +192,7 @@ describe("3/5: Display single repository API", function () {
   //Testing with a given Github account
   describe("In the case of a correct Github repo: ", function () {
     it("It should return the correct Github repo object", function (done) {
+      //This repository exists on Github
       let query = {
         user: "tamiragun",
         source: "Github",
@@ -180,6 +217,7 @@ describe("3/5: Display single repository API", function () {
   //Testing with a given Gitlab account
   describe("In the case of a correct Gitlab repo: ", function () {
     it("It should return the correct Gitlab repo object", function (done) {
+      //This repository exists on Gitlab
       let query = {
         user: "jack_smith",
         source: "Gitlab",
@@ -204,6 +242,7 @@ describe("3/5: Display single repository API", function () {
   //Testing with wrong parameters
   describe("In the case of not adding the right parameters: ", function () {
     it("Getting a 404 from Github should fail the request", function (done) {
+      //This repository does not exists on Github
       let query = {
         user: "jack_smith",
         source: "Github",
@@ -222,6 +261,7 @@ describe("3/5: Display single repository API", function () {
     }).timeout(5000);
 
     it("Getting a 404 from Gitlab should fail the request", function (done) {
+      //This repository does not exists on Gitlab
       let query = {
         user: "tamiragun",
         source: "Gitlab",
@@ -246,6 +286,7 @@ describe("4/5: Display list of repositories API", function () {
   //Testing with a given Github account
   describe("In the case of a correct Github user: ", function () {
     it("It should return the correct list of Github repos for that user", function (done) {
+      //This user exists on Github
       let query = {
         user: "tamiragun",
         source: "Github",
@@ -268,6 +309,7 @@ describe("4/5: Display list of repositories API", function () {
   //Testing with a given Gitlab account
   describe("In the case of a correct Gitlab user: ", function () {
     it("It should return the correct list of Gitlab repos for that user", function (done) {
+      //This user exists on Github
       let query = {
         user: "jack_smith",
         source: "Gitlab",
@@ -290,6 +332,7 @@ describe("4/5: Display list of repositories API", function () {
   //Testing with wrong parameters
   describe("In the case of not adding the right parameters: ", function () {
     it("Getting a 404 from Github should fail the request", function (done) {
+      //This user does not exist on Github
       let query = {
         user: "jack_smith",
         source: "Github",
@@ -306,6 +349,7 @@ describe("4/5: Display list of repositories API", function () {
     }).timeout(5000);
 
     it("Getting a 404 from Gitlab should fail the request", function (done) {
+      //This user does not exist on Gitlab
       let query = {
         user: "tamiragun",
         source: "Gitlab",
@@ -328,6 +372,7 @@ describe("5/5: Display list of commits API", function () {
   //Testing with a given Github account
   describe("In the case of a correct Github repo: ", function () {
     it("It should return the correct list of Github commits for that repo", function (done) {
+      //This repository exists on Github
       let query = {
         user: "tamiragun",
         source: "Github",
@@ -352,6 +397,7 @@ describe("5/5: Display list of commits API", function () {
   //Testing with a given Gitlab account
   describe("In the case of a correct Gitlab repo: ", function () {
     it("It should return the correct list of Gitlab commits for that repo", function (done) {
+      //This repository exists on Github, and has commits
       let query = {
         user: "jack",
         source: "Gitlab",
@@ -376,6 +422,7 @@ describe("5/5: Display list of commits API", function () {
   //Testing with wrong parameters
   describe("In the case of not adding the right parameters: ", function () {
     it("Getting a 404 from Github should fail the request", function (done) {
+      //This repository does not exist on Github
       let query = {
         user: "jack_smith",
         source: "Github",
@@ -394,6 +441,7 @@ describe("5/5: Display list of commits API", function () {
     }).timeout(5000);
 
     it("Getting a 404 from Gitlab should fail the request", function (done) {
+      //This repository does not exist on Gitlab
       let query = {
         user: "jack",
         source: "Gitlab",
