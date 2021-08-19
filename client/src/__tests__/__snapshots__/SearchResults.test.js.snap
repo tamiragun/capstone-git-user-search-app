@@ -1,70 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SearchResults shows results when a search is complete 1`] = `
-<div>
-  <ul
-    className="results-list"
+<ul
+  className="results-list"
+>
+  <li
+    className="bullet"
   >
-    <li
-      className="bullet"
+    <p>
+      <strong>
+        Username: 
+      </strong>
+      jack
+       
+      <br />
+      <strong>
+        Source: 
+      </strong>
+      Github
+       
+      <br />
+    </p>
+    <button
+      className="select-button"
+      onClick={[Function]}
+      value={
+        Array [
+          "Github",
+          "jack",
+        ]
+      }
     >
-      <p>
-        <strong>
-          Username: 
-        </strong>
-        jack
-         
-        <br />
-        <strong>
-          Source: 
-        </strong>
-        Github
-         
-        <br />
-      </p>
-      <button
-        className="select-button"
-        onClick={[Function]}
-        value={
-          Array [
-            "Github",
-            "jack",
-          ]
-        }
-      >
-        View this user
-      </button>
-    </li>
-    <li
-      className="bullet"
+      View this user
+    </button>
+  </li>
+  <li
+    className="bullet"
+  >
+    <p>
+      <strong>
+        Username: 
+      </strong>
+      jack
+       
+      <br />
+      <strong>
+        Source: 
+      </strong>
+      Gitlab
+       
+      <br />
+    </p>
+    <button
+      className="select-button"
+      onClick={[Function]}
+      value={
+        Array [
+          "Gitlab",
+          "jack",
+        ]
+      }
     >
-      <p>
-        <strong>
-          Username: 
-        </strong>
-        jack
-         
-        <br />
-        <strong>
-          Source: 
-        </strong>
-        Gitlab
-         
-        <br />
-      </p>
-      <button
-        className="select-button"
-        onClick={[Function]}
-        value={
-          Array [
-            "Gitlab",
-            "jack",
-          ]
-        }
-      >
-        View this user
-      </button>
-    </li>
-  </ul>
-</div>
+      View this user
+    </button>
+  </li>
+</ul>
 `;

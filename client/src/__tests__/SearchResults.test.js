@@ -22,6 +22,13 @@ test("SearchResults shows results when a search is complete", () => {
       source: "Gitlab",
     },
   ];
-  const tree = renderer.create(<SearchResults results={resultSet} />).toJSON();
+  const tree = renderer
+    .create(
+      <SearchResults
+        results={resultSet}
+        displayUser={function displayUser() {}}
+      />
+    )
+    .toJSON();
   expect(tree).toMatchSnapshot();
 });

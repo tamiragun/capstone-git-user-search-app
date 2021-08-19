@@ -12,7 +12,15 @@ test("SingleUser is shown", () => {
     url: "https://api.github.com/users/tamiragun",
     source: "Github",
   };
-  const tree = renderer.create(<SingleUser user={user} />).toJSON();
+  const tree = renderer
+    .create(
+      <SingleUser
+        user={user}
+        backToSearch={function backToSearch() {}}
+        displayRepo={function displayRepo() {}}
+      />
+    )
+    .toJSON();
   expect(tree).toMatchSnapshot();
 });
 

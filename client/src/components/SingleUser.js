@@ -1,34 +1,38 @@
 import React from "react";
 import { RepoList } from "./RepoList";
+import PropTypes from "prop-types";
 const fetch = require("node-fetch");
 
+//This component takes a prop in the form of a user object, and displays
+//its details. It also takes a prop with the backToSearch and DisplayRepo
+//functions of the parent (App) for when the buttons are clicked
 export function SingleUser(props) {
+  //repos will determine whether the repos are displayed vs a loading
+  //placeholder, and contain the necessary top 5 repos info
   const [repos, setRepos] = React.useState(null);
 
+  //As soon as the component is rendered, this function will run and fetch
+  //the list of repos to display.
   React.useEffect(() => {
+    //Nest an async function within useEffect, because useEffect is synchronous
     const fetchData = async () => {
+      //Construct the server endpoint url using the props
       const url = `/api/repos?source=${props.user.source}&user=${props.user.login}`;
       try {
+        //Call the endpoint
         const response = await fetch(url);
-        //console.log("Response: ", response, " Type: ", typeof response);
         const jsonResponse = await response.json();
-        // console.log(
-        //   "jsonResponse: ",
-        //   jsonResponse,
-        //   " Type: ",
-        //   typeof jsonResponse
-        // );
+        //Update the state to contain the array of repos
         setRepos(jsonResponse);
+        //If the request is unsuccessful, print the error message to the console
       } catch (err) {
         console.log(err);
       }
     };
+    //Call the async function to execute the fetch
     fetchData();
+    //Run this effect every time the user info changes
   }, [props.user]);
-
-  // const handleClick = (e) => {
-  //   props.goBack();
-  // };
 
   return (
     <div className="single-user">
@@ -38,11 +42,16 @@ export function SingleUser(props) {
         <br></br>
         <a href={props.user.url}>{props.user.url}</a>
         <h3>Latest 5 repositories:</h3>
+        {/*If the repos fetch is till pending, display a placeholder */}
         {!repos ? (
           <div className="placeholder">Loading...</div>
-        ) : repos.length === 0 ? (
+        ) : /*If the commits fetch yields zero results, display a message */
+        repos.length === 0 ? (
           <div className="placeholder">No repositories yet</div>
         ) : (
+          /*If the commits fetch yields results, display the commits.
+          Pass the array of repos from the state, but also pass on 2 of the
+          props (user and DisplayRepo) received from the parent (App) */
           <RepoList
             user={props.user}
             repos={repos}
@@ -51,6 +60,8 @@ export function SingleUser(props) {
         )}
       </div>
       <div className="TBC">
+        {/*No need for a separate event handler, this invokes the function 
+          that was passed down as a prop */}
         <button onClick={props.backToSearch} className="back-button">
           Go back to search results
         </button>
@@ -58,3 +69,10 @@ export function SingleUser(props) {
     </div>
   );
 }
+
+//The props are required, and should be a repo object and two functions.
+SingleUser.propTypes = {
+  user: PropTypes.object.isRequired,
+  backToSearch: PropTypes.func.isRequired,
+  displayRepo: PropTypes.func.isRequired,
+};

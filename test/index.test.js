@@ -7,7 +7,7 @@ chai.use(chaiHttp);
 //Test to ensure that the search API is working
 describe("1/5: Display search results API", function () {
   //Testing with a given Github account
-  describe("In the case of a currect Github user: ", function () {
+  describe("In the case of a correct Github user: ", function () {
     it("It should return the correct Github user object", function (done) {
       //This user only exists on Github, not Gitlab
       let query = { term: "tamiragun" };
@@ -27,7 +27,7 @@ describe("1/5: Display search results API", function () {
   });
 
   //Testing with a given Gitlab account
-  describe("In the case of a currect Gitlab user: ", function () {
+  describe("In the case of a correct Gitlab user: ", function () {
     it("It should return the correct Gitlab user object", function (done) {
       //This user only exists on Gitlab, not Github
       let query = { term: "jack_smith" };
@@ -47,7 +47,7 @@ describe("1/5: Display search results API", function () {
   });
 
   //Testing with a given Github and Gitlab account
-  describe("In the case of a currect Github and Gitlab user: ", function () {
+  describe("In the case of a correct Github and Gitlab user: ", function () {
     it("It should return an array with the correct Github and Gitlab user objects", function (done) {
       //This user exists on both Gitlab and Github
       let query = { term: "jack" };
@@ -88,7 +88,7 @@ describe("1/5: Display search results API", function () {
 //Test to ensure that the display user API is working
 describe("2/5: Display single user API", function () {
   //Testing with a given Github account
-  describe("In the case of a currect Github user: ", function () {
+  describe("In the case of a correct Github user: ", function () {
     it("It should return the correct Github user object", function (done) {
       //This user exists on Github
       let query = { user: "tamiragun", source: "Github" };
@@ -108,7 +108,7 @@ describe("2/5: Display single user API", function () {
   });
 
   //Testing with a given Gitlab account
-  describe("In the case of a currect Gitlab user: ", function () {
+  describe("In the case of a correct Gitlab user: ", function () {
     it("It should return the correct Gitlab user object", function (done) {
       //This user exists on Gitlab
       let query = { user: "jack_smith", source: "Gitlab" };

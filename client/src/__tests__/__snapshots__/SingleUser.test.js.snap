@@ -34,6 +34,7 @@ exports[`SingleUser is shown 1`] = `
   >
     <button
       className="back-button"
+      onClick={[Function]}
     >
       Go back to search results
     </button>
