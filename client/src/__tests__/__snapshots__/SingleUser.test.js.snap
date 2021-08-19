@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SingleUser is shown 1`] = `
+<div
+  className="single-user"
+>
+  <h2>
+    tamiragun
+  </h2>
+  <div
+    className="TBC"
+  >
+    <img
+      alt="user avatar"
+      src="https://avatars.githubusercontent.com/u/37237140?v=4"
+    />
+    <br />
+    <a
+      href="https://api.github.com/users/tamiragun"
+    >
+      https://api.github.com/users/tamiragun
+    </a>
+    <h3>
+      Latest 5 repositories:
+    </h3>
+    <div
+      className="placeholder"
+    >
+      Loading...
+    </div>
+  </div>
+  <div
+    className="TBC"
+  >
+    <button
+      className="back-button"
+    >
+      Go back to search results
+    </button>
+  </div>
+</div>
+`;
