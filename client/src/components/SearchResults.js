@@ -19,7 +19,7 @@ export function SearchResults(props) {
   //as a prop, display the name, source, and assign a unique key to each.
   const resultsList = results.map((result) => {
     return (
-      <li key={result.id} className="bullet">
+      <li key={result.id} className="result-bullet">
         <p>
           <strong>Username: </strong>
           {result.login} <br></br>

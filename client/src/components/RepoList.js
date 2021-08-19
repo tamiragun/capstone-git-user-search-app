@@ -31,7 +31,7 @@ export function RepoList(props) {
             //by the function it is passed to
             value={[repo.name, repo.id]}
             onClick={handleClick}
-            className="select-button"
+            className="select-button view-repo-button"
           >
             View this repo
           </button>

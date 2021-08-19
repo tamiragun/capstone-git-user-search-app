@@ -37,10 +37,11 @@ export function SingleUser(props) {
   return (
     <div className="single-user">
       <h2>{props.user.login}</h2>
-      <div className="TBC">
-        <img src={props.user.avatar} alt="user avatar"></img>
-        <br></br>
-        <a href={props.user.url}>{props.user.url}</a>
+      <div className="user-details">
+        <img src={props.user.avatar} alt="user avatar" className="avatar"></img>
+        <p>
+          <a href={props.user.url}>{props.user.url}</a>
+        </p>
         <h3>Latest 5 repositories:</h3>
         {/*If the repos fetch is till pending, display a placeholder */}
         {!repos ? (
@@ -62,7 +63,10 @@ export function SingleUser(props) {
       <div className="TBC">
         {/*No need for a separate event handler, this invokes the function 
           that was passed down as a prop */}
-        <button onClick={props.backToSearch} className="back-button">
+        <button
+          onClick={props.backToSearch}
+          className="back-button back-to-search-button"
+        >
           Go back to search results
         </button>
       </div>

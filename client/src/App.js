@@ -149,7 +149,10 @@ function App() {
                 results={results}
               ></SearchResults>
             )}
-            <button onClick={backToHome} className="back-button">
+            <button
+              onClick={backToHome}
+              className="back-button search-again-button"
+            >
               Search again
             </button>
           </div>

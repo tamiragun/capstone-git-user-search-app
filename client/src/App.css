@@ -1,13 +1,26 @@
 .App {
   text-align: center;
+  margin: 20px;
 }
+
+h1 {
+  font-size: 1.8em;
+}
+
+/*SEARCH BAR*/
 
 .search-input {
   padding: 8px 15px;
-  margin-right: 10px;
+  margin: 20px;
   border: 1px solid lightgray;
   border-radius: 5px;
 }
+
+.search-button {
+  margin: 0 20px;
+}
+
+/*SEARCH RESULTS CARD*/
 
 .placeholder {
   margin-bottom: 20px;
@@ -18,40 +31,57 @@
   padding: 0;
 }
 
+/*SINGLE USER CARD*/
+
+.single-user {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+a {
+  width: 222px;
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+}
+
+.avatar {
+  max-width: 200px;
+}
+
 .repo-list {
-  padding-left: 20px;
+  padding: 0;
+  list-style: none;
 }
 
 .repo-bullet {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   flex-wrap: wrap;
-  padding: 5px;
 }
 
 .repo-bullet span {
-  padding: 0 10px;
+  padding: 10px;
 }
 
+.view-repo-button {
+  width: 135px;
+}
+
+/* SINGLE REPO CARD */
+
 .commits-list {
-  padding-left: 20px;
+  padding-left: 15px;
 }
 
 .commit-bullet {
   text-align: left;
-  padding: 5px;
-}
-
-/*BOX STYLING \
-https://getcssscan.com/css-box-shadow-examples
-*/
-.single-user,
-.single-repo,
-.search-results {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  padding: 20px 30px 30px 30px;
-  margin: 30px;
+  padding: 5px 0 5px 5px;
 }
 
 /*BUTTON STYLING
@@ -62,7 +92,6 @@ https://www.w3schools.com/css/css3_buttons.asp
   background-color: white;
   color: black;
   border: 2px solid #4caf50;
-
   padding: 8px 15px;
   text-align: center;
   text-decoration: none;
@@ -73,7 +102,7 @@ https://www.w3schools.com/css/css3_buttons.asp
 }
 
 .select-button:hover {
-  background-color: #4caf50; /* Green */
+  background-color: #4caf50;
   border: none;
   color: white;
 }
@@ -89,10 +118,80 @@ https://www.w3schools.com/css/css3_buttons.asp
   font-size: 16px;
   border-radius: 8px;
   transition-duration: 0.4s;
+  margin: 15px 0 5px 0;
 }
 
 .back-button:hover {
-  background-color: #008cba; /* Blue */
+  background-color: #008cba;
   border: none;
   color: white;
+}
+
+/*BOX STYLING \
+https://getcssscan.com/css-box-shadow-examples
+*/
+
+.single-repo,
+.single-user,
+.search-results {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 20px;
+  margin: 30px 0;
+}
+
+/*MEDIA QUERIES*/
+
+@media only screen and (min-width: 750px) {
+  h1 {
+    padding-top: 20px;
+  }
+
+  /* SEARCH BAR */
+
+  .search-input {
+    margin: 20px 0 20px 20px;
+  }
+
+  /* SEARCH RESULTS */
+
+  .result-bullet {
+    display: inline-block;
+    margin: 0 35px;
+  }
+
+  /* SINGLE REPO CARD */
+
+  .repo-list {
+    list-style: normal;
+  }
+  .repo-bullet {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .repo-bullet span {
+    padding-right: 30px;
+  }
+
+  a {
+    width: 100%;
+  }
+}
+
+/* SINGLE REPO CARD */
+
+.commits-list {
+  padding-left: 60px;
+}
+
+/* BOXES */
+
+.single-repo,
+.single-user,
+.search-results {
+  max-width: 650px;
+  margin: 30px auto;
 }

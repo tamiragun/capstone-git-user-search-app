@@ -47,7 +47,7 @@ export class SearchBar extends React.Component {
             className="search-input"
             required
           ></input>
-          <button type="submit" className="select-button">
+          <button type="submit" className="select-button search-button">
             Search
           </button>
         </form>

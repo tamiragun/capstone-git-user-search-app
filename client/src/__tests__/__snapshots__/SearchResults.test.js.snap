@@ -5,7 +5,7 @@ exports[`SearchResults shows results when a search is complete 1`] = `
   className="results-list"
 >
   <li
-    className="bullet"
+    className="result-bullet"
   >
     <p>
       <strong>
@@ -35,7 +35,7 @@ exports[`SearchResults shows results when a search is complete 1`] = `
     </button>
   </li>
   <li
-    className="bullet"
+    className="result-bullet"
   >
     <p>
       <strong>

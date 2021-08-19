@@ -8,18 +8,20 @@ exports[`SingleUser is shown 1`] = `
     tamiragun
   </h2>
   <div
-    className="TBC"
+    className="user-details"
   >
     <img
       alt="user avatar"
+      className="avatar"
       src="https://avatars.githubusercontent.com/u/37237140?v=4"
     />
-    <br />
-    <a
-      href="https://api.github.com/users/tamiragun"
-    >
-      https://api.github.com/users/tamiragun
-    </a>
+    <p>
+      <a
+        href="https://api.github.com/users/tamiragun"
+      >
+        https://api.github.com/users/tamiragun
+      </a>
+    </p>
     <h3>
       Latest 5 repositories:
     </h3>
@@ -33,7 +35,7 @@ exports[`SingleUser is shown 1`] = `
     className="TBC"
   >
     <button
-      className="back-button"
+      className="back-button back-to-search-button"
       onClick={[Function]}
     >
       Go back to search results

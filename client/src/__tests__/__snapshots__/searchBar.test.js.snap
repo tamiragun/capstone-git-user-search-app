@@ -13,7 +13,7 @@ exports[`SearchBar is shown 1`] = `
       value=""
     />
     <button
-      className="select-button"
+      className="select-button search-button"
       type="submit"
     >
       Search
