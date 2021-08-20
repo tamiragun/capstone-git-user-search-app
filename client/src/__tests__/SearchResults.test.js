@@ -2,6 +2,7 @@ import React from "react";
 import { SearchResults } from "../components/SearchResults";
 import renderer from "react-test-renderer";
 
+//Snapshot test to ensure the component renders correctly
 test("SearchResults shows results when a search is complete", () => {
   let resultSet = [
     {
@@ -26,6 +27,9 @@ test("SearchResults shows results when a search is complete", () => {
     .create(
       <SearchResults
         results={resultSet}
+        //Declare empty function here, as this prop and its type (function)
+        //is required by propTypes and therefore the test will fail if not
+        //included here
         displayUser={function displayUser() {}}
       />
     )
