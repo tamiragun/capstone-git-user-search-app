@@ -51,4 +51,13 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+// Have Node serve the files for our built React app
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+  // All other GET requests not handled before will return our React app
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 module.exports = app;
