@@ -36,4 +36,4 @@ By all means, feel free to request improvements or indeed make them yourself! To
 
 ## Credits
 
-With thanks to Pieter at HyperionDev for his mentor support.
+Huge thanks to [Martin](https://github.com/martink-rsa) for his code review and general advice.
