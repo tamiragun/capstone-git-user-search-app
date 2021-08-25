@@ -2,15 +2,16 @@ var express = require("express");
 var router = express.Router();
 const fetch = require("node-fetch");
 //const { getData } = require("../util/helperFunctions.js");
+//import { getData } from "../util/helperFunctions";
 
-//Helper function to call a third party API and convert the results
+// Helper function to call a third party API and convert the results
 const getData = async (url) => {
   const response = await fetch(url);
   const jsonResponse = await response.json();
   return jsonResponse;
 };
 
-//CORS settings to allow the client to make requests to the server
+// CORS settings to allow the client to make requests to the server
 router.use((req, res, next) => {
   res.header({ "Access-Control-Allow-Origin": "*" });
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -21,20 +22,20 @@ router.use((req, res, next) => {
   next();
 });
 
-//API endpoint to return search results for a given search term
+// API endpoint to return search results for a given search term
 router.get("/api/search", async (req, res, next) => {
-  //Extract the data received from the request, and construct the urls
-  //for the third party endpoints
+  // Extract the data received from the request, and construct the urls
+  // for the third party endpoints
   const term = req.query.term;
   const urlGithub = `https://api.github.com/users/${term}`;
   const urlGitlab = `https://gitlab.com/api/v4/users?username=${term}`;
-  //Initialize empty array, to which we will push the results
+  // Initialize empty array, to which we will push the results
   let resultsArray = [];
 
   try {
-    //First, fetch results from Github:
+    // First, fetch results from Github:
     const dataGithub = await getData(urlGithub);
-    //If there are results, create a custom object using only the fields we need
+    // If there are results, create a custom object using only the fields we need
     if (dataGithub.message !== "Not Found") {
       const resultGithub = {
         id: dataGithub.id,
@@ -44,14 +45,14 @@ router.get("/api/search", async (req, res, next) => {
         url: dataGithub.url,
         source: "Github",
       };
-      //Then add the object to the array of search results
+      // Then add the object to the array of search results
       resultsArray.push(resultGithub);
     }
 
-    //Next, fetch results from Gitlab:
+    // Next, fetch results from Gitlab:
     const dataGitlab = await getData(urlGitlab);
-    //If there are results, create a custom object with the same structure as
-    //above, but mapping the Gitlab-specific properties to those keys.
+    // If there are results, create a custom object with the same structure as
+    // above, but mapping the Gitlab-specific properties to those keys.
     if (dataGitlab[0]) {
       const resultGitlab = {
         id: dataGitlab[0].id,
@@ -61,36 +62,36 @@ router.get("/api/search", async (req, res, next) => {
         url: dataGitlab[0].web_url,
         source: "Gitlab",
       };
-      //Add the object to the array of search results
+      // Add the object to the array of search results
       resultsArray.push(resultGitlab);
     }
-    //Respond to the client with the array of search results
+    // Respond to the client with the array of search results
     res.send(resultsArray);
-    //Catch any errors that might have occurred during the fetch operations
+    // Catch any errors that might have occurred during the fetch operations
   } catch (err) {
     next(err);
   }
 });
 
-//API endpoint to return a single user
+// API endpoint to return a single user
 router.get("/api/user", async (req, res, next) => {
-  //Extract the data received from the request, and construct the urls
-  //for the third party endpoints
+  // Extract the data received from the request, and construct the urls
+  // for the third party endpoints
   const user = req.query.user;
   const source = req.query.source;
   const urlGithub = `https://api.github.com/users/${user}`;
   const urlGitlab = `https://gitlab.com/api/v4/users?username=${user}`;
 
   try {
-    //Depending on which source was given, either call Github or Gitlab API
+    // Depending on which source was given, either call Github or Gitlab API
     if (source === "Github") {
-      //Make the API call with helper function
+      // Make the API call with helper function
       const data = await getData(urlGithub);
-      //If Github returns empty results, fail the request
+      // If Github returns empty results, fail the request
       if (data.message === "Not Found") {
         res.status(500).send("User not found");
-        //If Github does respond with user data, construct own object and map only
-        //the properties that we need
+        // If Github does respond with user data, construct own object and map only
+        // the properties that we need
       } else {
         const resultGithub = {
           id: data.id,
@@ -100,18 +101,18 @@ router.get("/api/user", async (req, res, next) => {
           url: data.url,
           source: "Github",
         };
-        //Then respond to the client with this custom user object
+        // Then respond to the client with this custom user object
         res.send(resultGithub);
       }
 
-      //If the source was Gitlab, make the API call to Gitlab instead
+      // If the source was Gitlab, make the API call to Gitlab instead
     } else if (source === "Gitlab") {
       const data = await getData(urlGitlab);
-      //If Gitlab returns an empty array, fail the request
+      // If Gitlab returns an empty array, fail the request
       if (!data[0]) {
         res.status(500).send("User not found");
-        //Otherwise, construct a custom object with the same keys as the Github
-        //one, but mapping the unique Gitlab properties to the values.
+        // Otherwise, construct a custom object with the same keys as the Github
+        // one, but mapping the unique Gitlab properties to the values.
       } else {
         const resultGitlab = {
           id: data[0].id,
@@ -121,39 +122,39 @@ router.get("/api/user", async (req, res, next) => {
           url: data[0].web_url,
           source: "Gitlab",
         };
-        //Send the custom user object back to the client.
+        // Send the custom user object back to the client.
         res.send(resultGitlab);
       }
-      //If the source is not defined properly, throw error
+      // If the source is not defined properly, throw error
     } else {
       throw new Error("not one of the sources Github or Gitlab");
     }
-    //Handle errors by passing them on to the last middleware
+    // Handle errors by passing them on to the last middleware
   } catch (err) {
     next(err);
   }
 });
 
-//API endpoint that returns a user's repositories
+// API endpoint that returns a user's repositories
 router.get("/api/repos", async (req, res, next) => {
-  //Extract the data received from the request, and construct the urls
-  //for the third party endpoints
+  // Extract the data received from the request, and construct the urls
+  // for the third party endpoints
   const user = req.query.user;
   const source = req.query.source;
   const urlGithub = `https://api.github.com/users/${user}/repos`;
   const urlGitlab = `https://gitlab.com/api/v4/users/${user}/projects`;
   try {
-    //Depending on which source was given, either call Github or Gitlab API
+    // Depending on which source was given, either call Github or Gitlab API
     if (source === "Github") {
-      //Make the API call with helper function
+      // Make the API call with helper function
       const data = await getData(urlGithub);
-      //If Github returns empty results, fail the request
+      // If Github returns empty results, fail the request
       if (data.message === "Not Found") {
         res.status(500).send("Repositories not found");
       }
-      //If Github does respond with user data, construct a new array of
-      //custom objects, which map only the needed Github properties to the
-      //keys
+      // If Github does respond with user data, construct a new array of
+      // custom objects, which map only the needed Github properties to the
+      // keys
       else {
         const resultGithub = data.map((object) => {
           return {

@@ -1,7 +1,7 @@
 import React from "react";
 import { RepoList } from "./RepoList";
 import PropTypes from "prop-types";
-const fetch = require("node-fetch");
+import { getData } from "../utils/getData.js";
 
 //This component takes a prop in the form of a user object, and displays
 //its details. It also takes a prop with the backToSearch and DisplayRepo
@@ -18,16 +18,10 @@ export function SingleUser(props) {
     const fetchData = async () => {
       //Construct the server endpoint url using the props
       const url = `/api/repos?source=${props.user.source}&user=${props.user.login}`;
-      try {
-        //Call the endpoint
-        const response = await fetch(url);
-        const jsonResponse = await response.json();
-        //Update the state to contain the array of repos
-        setRepos(jsonResponse);
-        //If the request is unsuccessful, print the error message to the console
-      } catch (err) {
-        console.log(err);
-      }
+      // Fetch the data
+      const result = await getData(url);
+      //Update the state to contain the array of repos
+      setRepos(result);
     };
     //Call the async function to execute the fetch
     fetchData();

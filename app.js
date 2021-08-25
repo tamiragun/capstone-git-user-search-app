@@ -18,7 +18,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, "public")));
+//I had commented this out for the last build, not sure if that was right
+app.use(express.static(path.join(__dirname, "public")));
 app.use(helmet());
 
 app.use("/", indexRouter);
@@ -51,8 +52,8 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+//Should this appear here, in index.js, or in bin/www??
 // Have Node serve the files for our built React app
-
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
   // All other GET requests not handled before will return our React app

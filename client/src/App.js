@@ -4,104 +4,81 @@ import { SearchResults } from "./components/SearchResults";
 import { SingleUser } from "./components/SingleUser";
 import { SingleRepo } from "./components/SingleRepo";
 import "./App.css";
+import { getData } from "./utils/getData.js";
 
 function App() {
-  //Declare the various state hooks
+  // Declare the various state hooks
 
-  //User will determine whether a single user is displayed, and contain the
-  //necessary user info
+  // User will determine whether a single user is displayed, and contain the
+  // necessary user info
   const [user, setUser] = React.useState(null);
-  //Repo will determine whether a single repo is displayed, and contain the
-  //necessary repo info
+  // Repo will determine whether a single repo is displayed, and contain the
+  // necessary repo info
   const [repo, setRepo] = React.useState(null);
-  //Results will determine whether the results are displayed vs a loading
-  //placeholder, and contain the necessary results info
+  // Results will determine whether the results are displayed vs a loading
+  // placeholder, and contain the necessary results info
   const [results, setResults] = React.useState(null);
-  //ShowResults will determine whether the results (loading placeholder or list)
-  //are displayed or not
+  // ShowResults will determine whether the results (loading placeholder or list)
+  // are displayed or not
   const [showResults, setShowResults] = React.useState(false);
 
-  //When a search is triggered by the child component (SearchBar), call the
-  //server to get the search results for that particular search term
+  // When a search is triggered by the child component (SearchBar), call the
+  // server to get the search results for that particular search term
   const handleSearch = async (term) => {
-    //First, set the other states to null so that the previous cards disappear
-    //from the screen.
+    // First, set the other states to null so that the previous cards disappear
+    // from the screen.
     setUser(null);
     setRepo(null);
     setResults(null);
-    //Allow the app to render the search results (which will first show 'loading'
-    //until the data is received, then it will display the data)
+    // Allow the app to render the search results (which will first show 'loading'
+    // until the data is received, then it will display the data)
     setShowResults(true);
-    //Construct the server endpoint url using the argument passed into the function
+    // Construct the server endpoint url using the argument passed into the function
     const url = `/api/search?term=${term}`;
-    try {
-      //Call the endpoint
-      const response = await fetch(url);
-      const jsonResponse = await response.json();
-      //Update the state to contain the array of search results
-      setResults(jsonResponse);
-      //If the request is unsuccessful, print the error message to the console
-    } catch (err) {
-      console.log(err);
-    }
+    // Fetch the data
+    const result = await getData(url);
+    // Update the state to contain the array of search results
+    setResults(result);
   };
 
-  //When the "Show this user" button is triggered by the child component (SearchResults), call the
-  //server to get the user results for that particular user
+  // When the "Show this user" button is triggered by the child component (SearchResults), call the
+  // server to get the user results for that particular user
   const displayUser = async (input) => {
-    //First, set the other states to null so that the previous cards disappear
-    //from the screen.
+    // First, set the other states to null so that the previous cards disappear
+    // from the screen.
     setUser(null);
     setRepo(null);
-    //The argument passed into the function is a string separated by a comma.
-    //To access each element separately, split the string so it becomes an array
-    //The first element should be the source and the second should be the username
-    const inputArray = input.split(",");
-    const source = inputArray[0];
-    const login = inputArray[1];
-    //Construct the server endpoint url
+    // The argument passed into the function is a string separated by a comma.
+    // To access each element separately, split the string so it becomes an array
+    // The first element should be the source and the second should be the username
+    const [source, login] = input.split(",");
+    // Construct the server endpoint url
     const url = `/api/user?source=${source}&user=${login}`;
-    try {
-      //Call the endpoint
-      const response = await fetch(url);
-      const jsonResponse = await response.json();
-      //Update the state to contain the returned user object
-      setUser(jsonResponse);
-      //If the request is unsuccessful, print the error message to the console
-    } catch (err) {
-      console.log(err);
-    }
+    // Fetch the data
+    const result = await getData(url);
+    // Update the state to contain the user object
+    setUser(result);
   };
 
-  //When the "Show this repo" button is triggered by the child component (SingleUser), call the
-  //server to get the repo results for that particular user
+  // When the "Show this repo" button is triggered by the child component (SingleUser), call the
+  // server to get the repo results for that particular user
   const displayRepo = async (source, user, repo) => {
-    //First, set the repo state to null so that the previous card disappears
-    //from the screen.
+    // First, set the repo state to null so that the previous card disappears
+    // from the screen.
     setRepo(null);
-    //The argument passed into the function is a string separated by a comma.
-    //To access each element separately, split the string so it becomes an array
-    //The first element should be the name and the second should be the id
-    const repoData = repo.split(",");
-    const repoName = repoData[0];
-    const repoId = repoData[1];
-    //Construct the server endpoint url
+    // The argument passed into the function is a string separated by a comma.
+    // To access each element separately, split the string so it becomes an array
+    // The first element should be the name and the second should be the id
+    const [repoName, repoId] = repo.split(",");
+    // Construct the server endpoint url
     const url = `/api/repo?source=${source}&user=${user}&reponame=${repoName}&repoid=${repoId}`;
-    try {
-      //Call the endpoint
-      const response = await fetch(url);
-      const jsonResponse = await response.json();
-      //Update the state to contain the returned repo object
-      setRepo(jsonResponse);
-      //If the request is unsuccessful, print the error message to the console
-    } catch (err) {
-      console.log(err);
-    }
+    const result = await getData(url);
+    setRepo(result);
   };
 
-  //When the "Go back to search results" button is clicked on the child component
-  //(SingleUser), the user and repo status should be reset to null so that they
-  //vanish from the screen and only the search results are shown
+  // When the "Go back to search results" button is clicked on the child component
+  // (SingleUser), the user and repo status should be reset to null so that they
+  // vanish from the screen and only the search results are shown
   const backToSearch = () => {
     setUser(null);
     setRepo(null);

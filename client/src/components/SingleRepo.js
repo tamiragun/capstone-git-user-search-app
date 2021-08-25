@@ -1,6 +1,7 @@
 import React from "react";
 import { CommitList } from "./CommitList";
 import PropTypes from "prop-types";
+import { getData } from "../utils/getData.js";
 
 //This component takes a prop in the form of a repo object, and displays
 //its details. It also takes a prop with the backToUser function of the
@@ -17,16 +18,10 @@ export function SingleRepo(props) {
     const fetchData = async () => {
       //Construct the server endpoint url using the props
       const url = `/api/commits?source=${props.repo.source}&user=${props.repo.owner}&reponame=${props.repo.name}&repoid=${props.repo.id}`;
-      try {
-        //Call the endpoint
-        const response = await fetch(url);
-        const jsonResponse = await response.json();
-        //Update the state to contain the array of commits
-        setCommits(jsonResponse);
-        //If the request is unsuccessful, print the error message to the console
-      } catch (err) {
-        console.log(err);
-      }
+      // Fetch the data
+      const result = await getData(url);
+      //Update the state to contain the array of commits
+      setCommits(result);
     };
     //Call the async function to execute the fetch
     fetchData();
